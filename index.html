@@ -1,212 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rock Paper Scissors</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <main class="card">
+      <div class="icons" aria-hidden="true">
+        <span>✊</span><span>✋</span><span>✌️</span>
+      </div>
+      <h1>Rock Paper Scissors</h1>
+      <p class="subtitle">Best of 5 rounds against the computer</p>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+      <ol class="steps">
+        <li>Press <kbd>F12</kbd> to open the browser console.</li>
+        <li>Click <strong>Start Game</strong> below.</li>
+        <li>Type <em>rock</em>, <em>paper</em> or <em>scissors</em> when prompted.</li>
+      </ol>
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      font-family: Arial, sans-serif;
-      background: #111827;
-      color: #f9fafb;
-    }
-
-    .game {
-      width: 100%;
-      max-width: 520px;
-      padding: 32px 24px;
-      text-align: center;
-      background: #1f2937;
-      border-radius: 20px;
-      box-shadow: 0 12px 35px rgb(0 0 0 / 30%);
-    }
-
-    h1 {
-      margin-top: 0;
-      font-size: 28px;
-    }
-
-    .instructions {
-      color: #d1d5db;
-    }
-
-    .choices {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 28px 0;
-    }
-
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 14px 18px;
-      font: inherit;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-    }
-
-    .choice {
-      background: #93c5fd;
-      color: #111827;
-    }
-
-    .choice:hover {
-      background: #bfdbfe;
-      transform: translateY(-2px);
-    }
-
-    button:focus-visible {
-      outline: 3px solid #fbbf24;
-      outline-offset: 4px;
-    }
-
-    .results {
-      padding: 18px;
-      background: #111827;
-      border-radius: 12px;
-    }
-
-    #result {
-      min-height: 28px;
-      margin: 12px 0 0;
-      font-size: 22px;
-      font-weight: bold;
-      color: #93c5fd;
-    }
-
-    .scores {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 24px 0;
-    }
-
-    .scores p {
-      margin: 0;
-    }
-
-    #reset {
-      background: #374151;
-      color: #f9fafb;
-    }
-
-    #reset:hover {
-      background: #4b5563;
-    }
-  </style>
-</head>
-
-<body>
-  <main class="game">
-    <h1>Rock Paper Scissors</h1>
-    <p class="instructions">Choose your move to play against the computer.</p>
-
-    <div class="choices" aria-label="Choose your move">
-      <button class="choice" type="button" data-choice="rock">
-        ✊ Rock
-      </button>
-      <button class="choice" type="button" data-choice="paper">
-        ✋ Paper
-      </button>
-      <button class="choice" type="button" data-choice="scissors">
-        ✌️ Scissors
-      </button>
-    </div>
-
-    <section class="results" aria-live="polite" aria-atomic="true">
-      <p id="moves">No round played yet.</p>
-      <p id="result">Make your choice!</p>
-    </section>
-
-    <div class="scores" aria-label="Scores">
-      <p>You: <span id="player-score">0</span></p>
-      <p>Computer: <span id="computer-score">0</span></p>
-      <p>Draws: <span id="draw-score">0</span></p>
-    </div>
-
-    <button id="reset" type="button">Reset game</button>
-  </main>
-
-  <script>
-    const choices = ["rock", "paper", "scissors"];
-
-    const beats = {
-      rock: "scissors",
-      paper: "rock",
-      scissors: "paper"
-    };
-
-    let playerScore = 0;
-    let computerScore = 0;
-    let draws = 0;
-
-    const movesElement = document.querySelector("#moves");
-    const resultElement = document.querySelector("#result");
-    const playerScoreElement = document.querySelector("#player-score");
-    const computerScoreElement = document.querySelector("#computer-score");
-    const drawScoreElement = document.querySelector("#draw-score");
-
-    function updateScores() {
-      playerScoreElement.textContent = playerScore;
-      computerScoreElement.textContent = computerScore;
-      drawScoreElement.textContent = draws;
-    }
-
-    function playRound(playerChoice) {
-      const computerChoice =
-        choices[Math.floor(Math.random() * choices.length)];
-
-      movesElement.textContent =
-        `You chose ${playerChoice}. Computer chose ${computerChoice}.`;
-
-      if (playerChoice === computerChoice) {
-        draws++;
-        resultElement.textContent = "It's a draw!";
-        resultElement.style.color = "#fbbf24";
-      } else if (beats[playerChoice] === computerChoice) {
-        playerScore++;
-        resultElement.textContent = "You win!";
-        resultElement.style.color = "#4ade80";
-      } else {
-        computerScore++;
-        resultElement.textContent = "Computer wins!";
-        resultElement.style.color = "#f87171";
-      }
-
-      updateScores();
-    }
-
-    document.querySelectorAll("[data-choice]").forEach((button) => {
-      button.addEventListener("click", () => {
-        playRound(button.dataset.choice);
-      });
-    });
-
-    document.querySelector("#reset").addEventListener("click", () => {
-      playerScore = 0;
-      computerScore = 0;
-      draws = 0;
-
-      updateScores();
-
-      movesElement.textContent = "No round played yet.";
-      resultElement.textContent = "Make your choice!";
-      resultElement.style.color = "#93c5fd";
-    });
-  </script>
-</body>
+      <button id="start-btn" type="button">Start Game</button>
+      <p class="hint">Click the button again any time to play a new game.</p>
+    </main>
+  </body>
 </html>
